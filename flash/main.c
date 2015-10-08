@@ -145,6 +145,7 @@ int main(int ac, char** av)
         if (sl == NULL) goto on_error;
         sl->verbose = o.log_level;
     }
+    printf("USB device opened\n");
 
     if (stlink_current_mode(sl) == STLINK_DEV_DFU_MODE)
         stlink_exit_dfu_mode(sl);

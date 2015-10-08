@@ -160,8 +160,8 @@ static inline int send_only
 }
 
 
-static int fill_command
-(stlink_t * sl, enum SCSI_Generic_Direction dir, uint32_t len) {
+static int fill_command(stlink_t * sl, enum SCSI_Generic_Direction dir,
+                        uint32_t len) {
     struct stlink_libusb * const slu = sl->backend_data;
     unsigned char* const cmd = sl->c_buf;
     int i = 0;
@@ -435,7 +435,8 @@ void _stlink_usb_jtag_reset(stlink_t * sl, int value) {
     cmd[i++] = STLINK_JTAG_DRIVE_NRST;
     cmd[i++] = value;
 
-    size = send_recv(slu, 1, cmd, slu->cmd_len, data, rep_len);
+    DLOG("*** stlink_usb_jtag_reset ***\n");
+    size = send_recv(slu, 1, cmd, i, data, rep_len);
     if (size == -1) {
         printf("[!] send_recv\n");
         return;
@@ -864,6 +865,7 @@ stlink_t* stlink_open_usb(const int verbose, int reset) {
     }
 
     if (reset) {
+        stlink_jtag_reset(sl, 2);
         stlink_reset(sl);
     }
     stlink_version(sl);
